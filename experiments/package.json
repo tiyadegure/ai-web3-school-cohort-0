@@ -1,0 +1,8 @@
+{
+  "name": "ai-x-web3-learn",
+  "version": "1.0.0",
+  "description": "AI x Web3 interactive learning demos",
+  "scripts": {
+    "tx-explainer": "node tx-explainer.mjs"
+  }
+}
