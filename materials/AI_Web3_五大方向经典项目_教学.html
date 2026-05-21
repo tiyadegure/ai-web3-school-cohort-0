@@ -1,0 +1,1680 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI * Web3</title>
+  <meta name="description" content="AI * Web3 项目图谱：去中心化 AI 基础设施、AI Agent 钱包、链上分析、智能钱包安全助手、交易所和 DeFi 风控。">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: oklch(96.5% 0.018 86);
+      --paper-soft: oklch(98% 0.012 92);
+      --paper-warm: oklch(93% 0.034 79);
+      --ink: oklch(19% 0.034 247);
+      --text: oklch(31% 0.032 247);
+      --muted: oklch(47% 0.03 243);
+      --faint: oklch(73% 0.025 80);
+      --line: oklch(84% 0.028 82);
+      --line-strong: oklch(70% 0.04 78);
+      --panel: oklch(98.4% 0.012 86);
+      --panel-alt: oklch(91.5% 0.045 102);
+      --green: oklch(43% 0.125 156);
+      --green-soft: oklch(90% 0.062 151);
+      --rust: oklch(56% 0.16 42);
+      --rust-soft: oklch(89% 0.065 46);
+      --cobalt: oklch(44% 0.145 255);
+      --cobalt-soft: oklch(89% 0.055 255);
+      --plum: oklch(43% 0.11 326);
+      --plum-soft: oklch(90% 0.045 326);
+      --gold: oklch(75% 0.13 83);
+      --gold-soft: oklch(91% 0.07 86);
+      --rose: oklch(57% 0.13 18);
+      --rose-soft: oklch(91% 0.055 20);
+      --radius: 8px;
+      --space-2xs: 4px;
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
+      --space-4xl: 96px;
+      --shadow-soft: 0 22px 70px color-mix(in oklch, var(--ink) 11%, transparent);
+      --shadow-tight: 0 12px 34px color-mix(in oklch, var(--ink) 9%, transparent);
+      --display: "Songti SC", "STSong", "Noto Serif CJK SC", Georgia, serif;
+      --body: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --mono: "SF Mono", "Menlo", "Consolas", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, color-mix(in oklch, var(--line) 34%, transparent) 1px, transparent 1px),
+        linear-gradient(180deg, color-mix(in oklch, var(--line) 32%, transparent) 1px, transparent 1px),
+        radial-gradient(circle at 14% 8%, color-mix(in oklch, var(--gold-soft) 70%, transparent), transparent 30%),
+        radial-gradient(circle at 88% 20%, color-mix(in oklch, var(--green-soft) 64%, transparent), transparent 28%),
+        var(--paper);
+      background-size: 32px 32px, 32px 32px, auto, auto, auto;
+      font-family: var(--body);
+      line-height: 1.74;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--cobalt);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    button,
+    a {
+      touch-action: manipulation;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--display);
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .progress {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 50;
+      height: 4px;
+      background: transparent;
+    }
+
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--rust);
+      transition: width 120ms linear;
+    }
+
+    .hero {
+      position: relative;
+      min-height: min(780px, 100svh);
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(115deg, color-mix(in oklch, var(--paper-soft) 74%, var(--gold-soft)) 0 42%, transparent 42%),
+        linear-gradient(145deg, color-mix(in oklch, var(--paper) 86%, var(--green-soft)), color-mix(in oklch, var(--paper-warm) 88%, var(--rust-soft)));
+      padding: clamp(56px, 7vw, 112px) clamp(20px, 5vw, 72px) clamp(40px, 6vw, 80px);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(118deg, transparent 0 57%, color-mix(in oklch, var(--ink) 9%, transparent) 57% 57.25%, transparent 57.25%),
+        linear-gradient(118deg, transparent 0 66%, color-mix(in oklch, var(--rust) 20%, transparent) 66% 66.25%, transparent 66.25%);
+      pointer-events: none;
+    }
+
+    #ledgerCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.74;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.72fr);
+      gap: clamp(28px, 5vw, 72px);
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: var(--space-xs);
+      align-items: center;
+      width: fit-content;
+      margin-bottom: var(--space-lg);
+      padding: 6px 10px;
+      border: 1px solid color-mix(in oklch, var(--green) 34%, var(--line));
+      border-radius: 999px;
+      background: color-mix(in oklch, var(--panel) 76%, transparent);
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--rust);
+    }
+
+    h1 {
+      max-width: 9.5ch;
+      font-size: clamp(3rem, 7.4vw, 7.7rem);
+      line-height: 0.98;
+    }
+
+    .hero-copy {
+      max-width: 66ch;
+      margin-top: var(--space-xl);
+      color: color-mix(in oklch, var(--ink) 76%, var(--muted));
+      font-size: clamp(1.02rem, 1.35vw, 1.22rem);
+    }
+
+    .hero-panel {
+      display: grid;
+      gap: var(--space-md);
+      align-content: end;
+    }
+
+    .teaching-card {
+      border: 1px solid color-mix(in oklch, var(--ink) 14%, var(--line));
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--panel) 88%, transparent);
+      box-shadow: var(--shadow-soft);
+      padding: var(--space-lg);
+    }
+
+    .teaching-card .label {
+      margin-bottom: var(--space-sm);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .teaching-card strong {
+      display: block;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(1.55rem, 2.6vw, 2.45rem);
+      line-height: 1.12;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-sm);
+    }
+
+    .stat {
+      min-height: 108px;
+      display: grid;
+      align-content: space-between;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--panel) 80%, transparent);
+    }
+
+    .stat b {
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(1.55rem, 3vw, 2.35rem);
+      line-height: 1;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      gap: var(--space-xs);
+      overflow-x: auto;
+      padding: var(--space-sm) clamp(16px, 4vw, 48px);
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in oklch, var(--paper) 86%, transparent);
+      backdrop-filter: blur(18px);
+      scrollbar-width: none;
+    }
+
+    .sticky-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-link {
+      flex: 0 0 auto;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.is-active {
+      border-color: color-mix(in oklch, var(--cobalt) 25%, var(--line));
+      background: color-mix(in oklch, var(--cobalt-soft) 72%, transparent);
+      color: var(--cobalt);
+      transform: translateY(-1px);
+    }
+
+    main {
+      display: grid;
+      gap: clamp(64px, 9vw, 120px);
+      padding: clamp(56px, 8vw, 104px) clamp(20px, 5vw, 72px) clamp(72px, 9vw, 120px);
+    }
+
+    .section {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      scroll-margin-top: 88px;
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(260px, 0.58fr);
+      gap: clamp(24px, 5vw, 64px);
+      align-items: end;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .section-kicker {
+      color: var(--rust);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin-top: var(--space-sm);
+      font-size: clamp(2.15rem, 5vw, 5.1rem);
+      line-height: 1.02;
+    }
+
+    .section-lede {
+      max-width: 65ch;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.15vw, 1.12rem);
+    }
+
+    .opening-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.65fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+
+    .lecture-flow {
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .flow-row {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) minmax(170px, 0.45fr);
+      gap: var(--space-md);
+      align-items: center;
+      min-height: 88px;
+      padding: var(--space-md);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--panel) 84%, transparent);
+      box-shadow: var(--shadow-tight);
+    }
+
+    .flow-num {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--paper-soft);
+      background: var(--ink);
+      font-family: var(--display);
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .flow-row h3 {
+      font-size: clamp(1.24rem, 2vw, 1.72rem);
+      line-height: 1.2;
+    }
+
+    .flow-row p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .flow-tag {
+      justify-self: end;
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      background: var(--paper-soft);
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .talk-box {
+      display: grid;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+      border: 1px solid color-mix(in oklch, var(--rust) 24%, var(--line));
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--rust-soft) 48%, var(--panel));
+    }
+
+    .talk-box h3,
+    .note h3 {
+      font-size: clamp(1.35rem, 2vw, 1.85rem);
+    }
+
+    .talk-box p {
+      color: color-mix(in oklch, var(--ink) 78%, var(--muted));
+    }
+
+    .stack-map {
+      display: grid;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+
+    .stack-layer {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: var(--space-md);
+      align-items: center;
+      padding: var(--space-sm);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--panel) 76%, transparent);
+    }
+
+    .stack-layer b {
+      color: var(--ink);
+      font-size: 0.86rem;
+    }
+
+    .stack-layer span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .direction {
+      display: grid;
+      gap: var(--space-xl);
+      padding-block: var(--space-xl);
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 88px;
+    }
+
+    .direction-head {
+      display: grid;
+      grid-template-columns: 86px minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .direction-index {
+      width: 72px;
+      height: 72px;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in oklch, var(--ink) 22%, var(--line));
+      border-radius: 50%;
+      color: var(--paper-soft);
+      background: var(--ink);
+      font-family: var(--display);
+      font-size: 1.9rem;
+      line-height: 1;
+    }
+
+    .direction h3 {
+      font-size: clamp(1.8rem, 3.7vw, 3.7rem);
+      line-height: 1.06;
+    }
+
+    .direction-summary {
+      max-width: 75ch;
+      margin-top: var(--space-sm);
+      color: var(--muted);
+      font-size: clamp(0.98rem, 1.1vw, 1.1rem);
+    }
+
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(320px, 1.1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+
+    .lesson-panel,
+    .project-card,
+    .source-panel,
+    .risk-item,
+    .script-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--panel) 86%, transparent);
+      box-shadow: var(--shadow-tight);
+    }
+
+    .lesson-panel {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      position: sticky;
+      top: 78px;
+    }
+
+    .lesson-panel h4 {
+      font-size: clamp(1.22rem, 1.8vw, 1.65rem);
+      line-height: 1.2;
+    }
+
+    .lesson-panel p,
+    .lesson-panel li {
+      color: var(--muted);
+    }
+
+    .lesson-list {
+      display: grid;
+      gap: var(--space-sm);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .lesson-list li {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: var(--space-sm);
+      align-items: start;
+    }
+
+    .lesson-list li::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      margin-top: 0.62em;
+      border-radius: 50%;
+      background: var(--rust);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .project-card {
+      min-height: 256px;
+      display: grid;
+      gap: var(--space-md);
+      align-content: start;
+      padding: var(--space-lg);
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in oklch, var(--cobalt) 30%, var(--line));
+      box-shadow: 0 18px 42px color-mix(in oklch, var(--ink) 13%, transparent);
+      background: color-mix(in oklch, var(--panel) 93%, var(--cobalt-soft));
+    }
+
+    .project-card--featured {
+      grid-column: 1 / -1;
+      min-height: auto;
+      gap: var(--space-lg);
+      padding: clamp(24px, 4vw, 40px);
+      border-color: color-mix(in oklch, var(--rust) 26%, var(--line));
+      background:
+        linear-gradient(135deg, color-mix(in oklch, var(--paper-soft) 78%, var(--gold-soft)), color-mix(in oklch, var(--panel) 90%, var(--green-soft)));
+      box-shadow: 0 24px 64px color-mix(in oklch, var(--ink) 13%, transparent);
+    }
+
+    .project-card--featured:hover {
+      background:
+        linear-gradient(135deg, color-mix(in oklch, var(--paper-soft) 78%, var(--gold-soft)), color-mix(in oklch, var(--panel) 88%, var(--cobalt-soft)));
+    }
+
+    .project-card--featured .project-top {
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .project-card--featured .project-name {
+      font-size: clamp(2rem, 4vw, 3.45rem);
+      line-height: 1.02;
+    }
+
+    .project-top {
+      display: flex;
+      gap: var(--space-sm);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .project-name {
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 1.36rem;
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .project-badge {
+      flex: 0 0 auto;
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: color-mix(in oklch, var(--gold-soft) 74%, var(--panel));
+      color: color-mix(in oklch, var(--ink) 82%, var(--gold));
+      font-size: 0.72rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .project-card p {
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.65;
+    }
+
+    .project-card .featured-label {
+      margin-bottom: var(--space-xs);
+      color: var(--rust);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .project-card--featured > p {
+      max-width: 82ch;
+      color: color-mix(in oklch, var(--ink) 78%, var(--muted));
+      font-size: clamp(1rem, 1.2vw, 1.12rem);
+      line-height: 1.68;
+    }
+
+    .talk-line {
+      padding: var(--space-sm);
+      border: 1px solid color-mix(in oklch, var(--green) 24%, var(--line));
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--green-soft) 38%, var(--panel));
+      color: color-mix(in oklch, var(--ink) 82%, var(--green));
+      font-size: 0.9rem;
+      font-weight: 760;
+      line-height: 1.55;
+    }
+
+    .principle-block {
+      display: grid;
+      gap: var(--space-sm);
+      padding-top: var(--space-lg);
+      border-top: 1px solid color-mix(in oklch, var(--ink) 12%, var(--line));
+    }
+
+    .principle-block h4 {
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(1.24rem, 2vw, 1.78rem);
+      line-height: 1.18;
+    }
+
+    .principle-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      align-items: center;
+    }
+
+    .principle-flow span {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border: 1px solid color-mix(in oklch, var(--ink) 13%, var(--line));
+      border-radius: 999px;
+      background: color-mix(in oklch, var(--panel) 74%, transparent);
+      color: var(--ink);
+      font-size: 0.86rem;
+      font-weight: 820;
+      line-height: 1.25;
+    }
+
+    .principle-flow i {
+      color: var(--rust);
+      font-style: normal;
+      font-weight: 900;
+    }
+
+    .project-link {
+      align-self: end;
+      color: var(--cobalt);
+      font-size: 0.86rem;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .project-link:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .matrix-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-lg);
+    }
+
+    .filter-btn {
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: color-mix(in oklch, var(--panel) 86%, transparent);
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 850;
+      cursor: pointer;
+      transition: background 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.is-active {
+      border-color: color-mix(in oklch, var(--rust) 32%, var(--line));
+      background: color-mix(in oklch, var(--rust-soft) 58%, var(--panel));
+      color: var(--rust);
+      transform: translateY(-1px);
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .matrix-card {
+      min-height: 184px;
+      display: grid;
+      gap: var(--space-sm);
+      align-content: start;
+      padding: var(--space-md);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--panel) 86%, transparent);
+      transition: opacity 180ms ease, transform 180ms ease, border-color 180ms ease;
+    }
+
+    .matrix-card[hidden] {
+      display: none;
+    }
+
+    .matrix-card:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in oklch, var(--green) 28%, var(--line));
+    }
+
+    .matrix-card b {
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 1.16rem;
+      line-height: 1.18;
+    }
+
+    .matrix-card small {
+      width: fit-content;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: var(--paper-soft);
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .matrix-card span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .risk-item {
+      min-height: 180px;
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+      align-content: start;
+    }
+
+    .risk-item h3 {
+      font-size: 1.3rem;
+      line-height: 1.22;
+    }
+
+    .risk-item p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .scripts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .script-card {
+      display: grid;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+      align-content: start;
+    }
+
+    .script-card h3 {
+      font-size: 1.42rem;
+      line-height: 1.18;
+    }
+
+    .script-card p {
+      color: var(--muted);
+      line-height: 1.66;
+    }
+
+    .script-card .quote {
+      padding: var(--space-md);
+      border: 1px solid color-mix(in oklch, var(--plum) 24%, var(--line));
+      border-radius: var(--radius);
+      background: color-mix(in oklch, var(--plum-soft) 48%, var(--panel));
+      color: color-mix(in oklch, var(--ink) 82%, var(--plum));
+      font-weight: 760;
+    }
+
+    .source-panel {
+      padding: var(--space-lg);
+    }
+
+    .source-panel h3 {
+      margin-bottom: var(--space-md);
+      font-size: 1.6rem;
+    }
+
+    .source-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-sm) var(--space-lg);
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .source-list li {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .source-list a {
+      font-weight: 760;
+    }
+
+    .footer-note {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding-top: var(--space-xl);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 920px) {
+      .hero-inner,
+      .section-header,
+      .opening-grid,
+      .lesson-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .lesson-panel {
+        position: static;
+      }
+
+      .flow-row {
+        grid-template-columns: 52px minmax(0, 1fr);
+      }
+
+      .flow-tag {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        max-width: 10ch;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .direction-head {
+        grid-template-columns: 1fr;
+      }
+
+      .direction-index {
+        width: 58px;
+        height: 58px;
+        font-size: 1.55rem;
+      }
+
+      .stack-layer {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card,
+      .risk-item,
+      .script-card,
+      .source-panel,
+      .lesson-panel,
+      .talk-box {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <header class="hero" id="top">
+    <canvas id="ledgerCanvas" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">AI x Web3 Project Map</div>
+        <h1>AI * Web3</h1>
+        <p class="hero-copy">用 Bittensor、Coinbase AgentKit、Arkham、Blockaid、Chainalysis 五个主案例，串起 AI 进入 Web3 经济系统时需要的资源、账户、认知、安全和风控能力。</p>
+      </div>
+      <aside class="hero-panel" aria-label="核心信息">
+        <div class="teaching-card">
+          <p class="label">核心判断</p>
+          <strong>AI 负责理解与决策，Web3 负责身份、支付、结算和审计。</strong>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><b>5</b><span>方向</span></div>
+          <div class="stat"><b>25+</b><span>项目案例</span></div>
+          <div class="stat"><b>2026</b><span>公开资料</span></div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <nav class="sticky-nav" aria-label="页面导航">
+    <a class="nav-link" href="#framework">核心框架</a>
+    <a class="nav-link" href="#directions">五个方向</a>
+    <a class="nav-link" href="#matrix">项目矩阵</a>
+    <a class="nav-link" href="#risks">风险边界</a>
+    <a class="nav-link" href="#script">三条判断</a>
+    <a class="nav-link" href="#sources">来源</a>
+  </nav>
+
+  <main>
+    <section class="section reveal" id="framework">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">01 / Framework</div>
+          <h2>AI + Web3 的核心不是发币，而是经济基础设施</h2>
+        </div>
+        <p class="section-lede">当 AI agent 从“回答问题”走向“执行任务”，它需要的不只是模型能力。Bittensor 解决 AI 服务从哪里来，Coinbase AgentKit 解决 agent 怎么执行，Arkham 解决链上数据怎么看懂，Blockaid 解决用户怎么不被骗，Chainalysis 解决机构怎么监控风险。</p>
+      </div>
+
+      <div class="opening-grid">
+        <div class="lecture-flow" aria-label="五个方向结构">
+          <article class="flow-row">
+            <div class="flow-num">1</div>
+            <div>
+              <h3>去中心化 AI 基础设施</h3>
+              <p>谁来提供算力、存储、数据、模型推理和服务发现。</p>
+            </div>
+            <span class="flow-tag">资源层</span>
+          </article>
+          <article class="flow-row">
+            <div class="flow-num">2</div>
+            <div>
+              <h3>AI Agent + 钱包</h3>
+              <p>让 agent 有链上身份、资产账户、支付能力和执行权限。</p>
+            </div>
+            <span class="flow-tag">行动层</span>
+          </article>
+          <article class="flow-row">
+            <div class="flow-num">3</div>
+            <div>
+              <h3>AI 链上分析工具</h3>
+              <p>把地址、资金流、项目风险和市场行为翻译成人能理解的判断。</p>
+            </div>
+            <span class="flow-tag">认知层</span>
+          </article>
+          <article class="flow-row">
+            <div class="flow-num">4</div>
+            <div>
+              <h3>智能钱包和安全助手</h3>
+              <p>在签名、授权、转账和交互前，帮助用户识别真实后果。</p>
+            </div>
+            <span class="flow-tag">用户保护层</span>
+          </article>
+          <article class="flow-row">
+            <div class="flow-num">5</div>
+            <div>
+              <h3>交易所和 DeFi 智能风控</h3>
+              <p>用模型、规则和链上监控发现异常交易、攻击和系统性风险。</p>
+            </div>
+            <span class="flow-tag">机构风控层</span>
+          </article>
+        </div>
+
+        <aside class="talk-box">
+          <h3>核心观点</h3>
+          <p>“如果 AI 只是聊天，Web3 不是必需品。但当 AI 开始租算力、买数据、调用 API、发起交易、管理资产、和其他 agent 协作时，它就需要一个能被授权、能付款、能记录、能追责的经济层。”</p>
+          <div class="stack-map">
+            <div class="stack-layer"><b>底层资源</b><span>算力、存储、数据、模型服务</span></div>
+            <div class="stack-layer"><b>经济账户</b><span>钱包、身份、支付、权限和限额</span></div>
+            <div class="stack-layer"><b>认知工具</b><span>链上分析、项目研究、资金流解释</span></div>
+            <div class="stack-layer"><b>安全防线</b><span>交易模拟、欺诈识别、签名前保护</span></div>
+            <div class="stack-layer"><b>系统风控</b><span>交易所 KYT、DeFi 参数、攻击预警</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section reveal" id="directions">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">02 / Five Directions</div>
+          <h2>五个方向构成一套 Agent 经济栈</h2>
+        </div>
+        <p class="section-lede">每个方向都对应 agent 经济系统里的一个基础问题：资源从哪里来、账户如何授权、数据如何理解、用户如何保护、系统如何防风险。</p>
+      </div>
+
+      <article class="direction" id="infra">
+        <div class="direction-head">
+          <div class="direction-index">1</div>
+          <div>
+            <h3>去中心化 AI 基础设施</h3>
+            <p class="direction-summary">这一类项目回答的是“AI 生产要素怎么被组织”：GPU、存储、数据集、模型推理、agent 服务市场，以及这些服务如何用 token 激励和验证。</p>
+          </div>
+        </div>
+        <div class="lesson-grid">
+          <aside class="lesson-panel">
+            <h4>关键理解</h4>
+            <ul class="lesson-list">
+              <li>主流路径不是把大模型直接放到链上运行，而是链下计算，链上激励、结算、验证和服务发现。</li>
+              <li>中心化云通常是平台化资源市场，Bittensor、Render、Akash 代表更开放的资源市场实验。</li>
+              <li>关键难点是质量验证、反作弊、稳定性、价格效率和企业级 SLA。</li>
+            </ul>
+          </aside>
+          <div class="project-grid">
+            <article class="project-card project-card--featured">
+              <div class="project-top">
+                <div>
+                  <p class="featured-label">主案例 / 去中心化 AI 基础设施</p>
+                  <div class="project-name">Bittensor</div>
+                </div>
+                <span class="project-badge">激励网络</span>
+              </div>
+              <p>Bittensor 代表的是“用市场机制组织 AI 服务”。它不追求把大模型直接放到链上运行，而是把模型输出、推理服务、数据服务或预测能力放进不同 subnet 里竞争，再通过验证者评分和 token 激励分配收益。</p>
+              <div class="principle-block">
+                <h4>实现原理</h4>
+                <div class="principle-flow" aria-label="Bittensor 实现流程">
+                  <span>Subnet 定义任务和评分规则</span><i>→</i>
+                  <span>Miner 提供 AI 服务</span><i>→</i>
+                  <span>Validator 评估输出质量</span><i>→</i>
+                  <span>链上共识汇总评分</span><i>→</i>
+                  <span>优质供给获得奖励</span>
+                </div>
+              </div>
+              <div class="talk-line">核心看点：AI 服务如何用 token 发现价格和组织生产。</div>
+              <a class="project-link" href="https://docs.learnbittensor.org/subnets/understanding-subnets/" target="_blank" rel="noreferrer">官方文档</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Render Network</div><span class="project-badge">GPU</span></div>
+              <p>从去中心化渲染网络起家，叙事延展到 GPU compute 和生成式 AI。重点是闲置 GPU 资源如何进入开放市场。</p>
+              <div class="talk-line">核心看点：真实资源供需网络，而不是纯概念 AI 叙事。</div>
+              <a class="project-link" href="https://rendernetwork.com/" target="_blank" rel="noreferrer">官网</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Akash</div><span class="project-badge">云计算</span></div>
+              <p>去中心化云计算市场，支持部署容器、GPU 和 AI/ML workload。可以和 AWS、GCP、Azure 做对照。</p>
+              <div class="talk-line">核心看点：开发者能不能用更开放的方式购买计算资源。</div>
+              <a class="project-link" href="https://akash.network/docs/getting-started/" target="_blank" rel="noreferrer">官方文档</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Filecoin / Arweave</div><span class="project-badge">存储</span></div>
+              <p>Filecoin 代表可验证存储市场，Arweave 代表永久存储。AI 数据集、模型权重、agent memory 都需要长期存储路径。</p>
+              <div class="talk-line">核心看点：AI 数据资产不能只放在封闭平台数据库里。</div>
+              <a class="project-link" href="https://www.filecoin.io/store-data" target="_blank" rel="noreferrer">Filecoin</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Fetch.ai / ASI</div><span class="project-badge">服务网络</span></div>
+              <p>围绕 autonomous agents、服务发现和微支付构建开放 AI 经济网络，对应“agent 之间如何交易服务”的场景。</p>
+              <div class="talk-line">核心看点：AI agent 不只和人交互，也会和其他 agent 交互。</div>
+              <a class="project-link" href="https://network.fetch.ai/docs/guides/network/intro-fet-token" target="_blank" rel="noreferrer">官方文档</a>
+            </article>
+          </div>
+        </div>
+      </article>
+
+      <article class="direction" id="agents">
+        <div class="direction-head">
+          <div class="direction-index">2</div>
+          <div>
+            <h3>AI Agent + 钱包</h3>
+            <p class="direction-summary">这一类项目回答的是“AI 怎么从建议者变成执行者”：agent 需要身份、钱包、限额、付款、交易执行和撤销权限。</p>
+          </div>
+        </div>
+        <div class="lesson-grid">
+          <aside class="lesson-panel">
+            <h4>关键理解</h4>
+            <ul class="lesson-list">
+              <li>没有钱包的 agent 只能推荐；有钱包的 agent 才能支付、交易和收款。</li>
+              <li>安全形态不是“完全自治”，而是“人类授权范围内自动执行”。</li>
+              <li>关键 guardrails 包括：预算、白名单、单笔上限、会话上限、KYT、日志和撤销。</li>
+            </ul>
+          </aside>
+          <div class="project-grid">
+            <article class="project-card project-card--featured">
+              <div class="project-top">
+                <div>
+                  <p class="featured-label">主案例 / AI Agent + 钱包</p>
+                  <div class="project-name">Coinbase AgentKit</div>
+                </div>
+                <span class="project-badge">开发者</span>
+              </div>
+              <p>AgentKit 代表的是 AI agent 的“链上手脚”。普通 agent 可以分析和建议，但接入钱包与 onchain actions 之后，才能在授权范围内完成转账、swap、合约调用和部署等真实链上动作。</p>
+              <div class="principle-block">
+                <h4>实现原理</h4>
+                <div class="principle-flow" aria-label="Coinbase AgentKit 实现流程">
+                  <span>用户给出目标</span><i>→</i>
+                  <span>LLM 拆解任务</span><i>→</i>
+                  <span>AgentKit 选择链上 action</span><i>→</i>
+                  <span>Wallet Provider 签名和广播</span><i>→</i>
+                  <span>链上结果返回给 agent</span>
+                </div>
+              </div>
+              <div class="talk-line">核心看点：如何把 LLM 的工具调用连接到真实链上动作。</div>
+              <a class="project-link" href="https://docs.cdp.coinbase.com/agent-kit" target="_blank" rel="noreferrer">官方文档</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">MoonPay Agents</div><span class="project-badge">支付</span></div>
+              <p>把入金、钱包、稳定币支付和交易执行放进 agent 工作流。MoonAgents Card 进一步尝试让 agent 使用稳定币通过卡网络消费。</p>
+              <div class="talk-line">核心看点：agentic commerce 不是聊天，而是能付款和完成购买。</div>
+              <a class="project-link" href="https://www.moonpay.com/newsroom/moonpay-agents?from=%2Fnewsroom" target="_blank" rel="noreferrer">官方介绍</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Privy Agentic Wallets</div><span class="project-badge">权限</span></div>
+              <p>面向嵌入式钱包和 agent 授权，重点是用户体验、MFA、花费限制、审批策略和应用内钱包管理。</p>
+              <div class="talk-line">核心看点：真正的关键不是“AI 会操作钱包”，而是“用户怎么安全授权”。</div>
+              <a class="project-link" href="https://docs.privy.io/wallets/overview/embedded" target="_blank" rel="noreferrer">官方文档</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Virtuals Protocol</div><span class="project-badge">消费端</span></div>
+              <p>把 AI agent token 化，强调 agent 可以创造内容、服务、收入和社区协作。它代表“agent 经济体”的市场叙事。</p>
+              <div class="talk-line">核心看点：agent 变成可以被资本化、治理和交易的经济主体。</div>
+              <a class="project-link" href="https://whitepaper.virtuals.io/" target="_blank" rel="noreferrer">白皮书</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">elizaOS</div><span class="project-badge">开源框架</span></div>
+              <p>开源 Web3 agent 框架，围绕社交、钱包、链上插件和多平台部署构建开发者生态。</p>
+              <div class="talk-line">核心看点：普通开发者如何用插件系统搭建链上 agent。</div>
+              <a class="project-link" href="https://docs.elizaos.ai/" target="_blank" rel="noreferrer">官方文档</a>
+            </article>
+          </div>
+        </div>
+      </article>
+
+      <article class="direction" id="analytics">
+        <div class="direction-head">
+          <div class="direction-index">3</div>
+          <div>
+            <h3>AI 驱动的链上分析工具</h3>
+            <p class="direction-summary">这一类项目回答的是“链上数据怎么变成判断”：地址标签、资金流、项目关系、聪明钱、风险信号和自然语言查询。</p>
+          </div>
+        </div>
+        <div class="lesson-grid">
+          <aside class="lesson-panel">
+            <h4>关键理解</h4>
+            <ul class="lesson-list">
+              <li>链上数据是公开的，但公开不等于可理解。AI 的价值在于清洗、标签、解释和生成假设。</li>
+              <li>面向普通用户，关键是“看懂”；面向机构，关键是“可验证、可追溯、可审计”。</li>
+              <li>标签和聚类是概率判断，不是法律事实。</li>
+            </ul>
+          </aside>
+          <div class="project-grid">
+            <article class="project-card project-card--featured">
+              <div class="project-top">
+                <div>
+                  <p class="featured-label">主案例 / AI 链上分析</p>
+                  <div class="project-name">Arkham</div>
+                </div>
+                <span class="project-badge">实体画像</span>
+              </div>
+              <p>Arkham 代表的是把“地址层数据”翻译成“实体层情报”。链上数据虽然公开，但哈希地址、跨链转移和合约交互很难直接理解；Arkham 通过地址标签、实体归因和资金流分析，把链上行为还原成更接近现实主体的画像。</p>
+              <div class="principle-block">
+                <h4>实现原理</h4>
+                <div class="principle-flow" aria-label="Arkham 实现流程">
+                  <span>采集多链交易数据</span><i>→</i>
+                  <span>地址聚类和标签</span><i>→</i>
+                  <span>归因到实体和钱包集群</span><i>→</i>
+                  <span>计算资金流和行为画像</span><i>→</i>
+                  <span>生成搜索、告警和分析视图</span>
+                </div>
+              </div>
+              <div class="talk-line">核心看点：链上透明性和隐私之间的张力。</div>
+              <a class="project-link" href="https://codex.arkm.com/the-intelligence-platform" target="_blank" rel="noreferrer">平台介绍</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Nansen</div><span class="project-badge">聪明钱</span></div>
+              <p>以钱包标签、Smart Money 和资金流分析出名，常用于跟踪交易员、机构和市场行为。</p>
+              <div class="talk-line">核心看点：链上研究从“看价格”走向“看资金和地址行为”。</div>
+              <a class="project-link" href="https://www.nansen.ai/" target="_blank" rel="noreferrer">官网</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Dune</div><span class="project-badge">自然语言</span></div>
+              <p>Dune 的 API、Agents 和 MCP 能让 agent 辅助查询、生成 dashboard 和分析链上数据，降低 SQL 门槛。</p>
+              <div class="talk-line">核心看点：AI 把链上分析从“写查询”变成“提问题”。</div>
+              <a class="project-link" href="https://docs.dune.com/api-reference/agents/mcp/" target="_blank" rel="noreferrer">MCP 文档</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Bubblemaps</div><span class="project-badge">可视化</span></div>
+              <p>用钱包集群和代币分布图展示持仓关系、内部人行为和可疑关联，可以快速观察代币结构。</p>
+              <div class="talk-line">核心看点：图形化界面如何降低普通用户的链上调查门槛。</div>
+              <a class="project-link" href="https://bubblemaps.io/" target="_blank" rel="noreferrer">官网</a>
+            </article>
+          </div>
+        </div>
+      </article>
+
+      <article class="direction" id="wallet-security">
+        <div class="direction-head">
+          <div class="direction-index">4</div>
+          <div>
+            <h3>智能钱包和安全助手</h3>
+            <p class="direction-summary">这一类项目回答的是“普通用户怎么安全使用 Web3”：从单私钥账户升级到智能账户、交易模拟、权限管理、恶意 dApp 检测和签名前提醒。</p>
+          </div>
+        </div>
+        <div class="lesson-grid">
+          <aside class="lesson-panel">
+            <h4>关键理解</h4>
+            <ul class="lesson-list">
+              <li>Web3 最大的 UX 问题不是按钮难看，而是用户看不懂签名后果。</li>
+              <li>智能钱包把“账户”变成权限系统：多签、恢复、限额、session key、gas sponsor。</li>
+              <li>安全助手把“签名确认”变成“交易解释 + 风险拦截”。</li>
+            </ul>
+          </aside>
+          <div class="project-grid">
+            <article class="project-card project-card--featured">
+              <div class="project-top">
+                <div>
+                  <p class="featured-label">主案例 / 智能钱包与安全助手</p>
+                  <div class="project-name">Blockaid</div>
+                </div>
+                <span class="project-badge">安全基础设施</span>
+              </div>
+              <p>Blockaid 代表的是钱包背后的实时安全检测层。它把用户即将签名的交易、访问的 dApp、接触的合约和链上历史行为放在一起分析，在资产真正移动前识别钓鱼、恶意授权和高风险交互。</p>
+              <div class="principle-block">
+                <h4>实现原理</h4>
+                <div class="principle-flow" aria-label="Blockaid 实现流程">
+                  <span>用户打开 dApp 或发起交易</span><i>→</i>
+                  <span>扫描域名、合约和 calldata</span><i>→</i>
+                  <span>模拟交易执行结果</span><i>→</i>
+                  <span>匹配恶意模式和风险实体</span><i>→</i>
+                  <span>钱包展示警告或拦截</span>
+                </div>
+              </div>
+              <div class="talk-line">核心看点：安全能力会成为钱包默认基础设施，而不是用户自己搜索攻略。</div>
+              <a class="project-link" href="https://www.blockaid.io/" target="_blank" rel="noreferrer">Blockaid</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Coinbase Smart Wallet</div><span class="project-badge">账户抽象</span></div>
+              <p>passkey、免插件、批量交易、gas sponsor 等能力，代表面向大众用户的 Web3 钱包体验改造。</p>
+              <div class="talk-line">核心看点：新用户不应该一上来就面对助记词和 gas。</div>
+              <a class="project-link" href="https://help.coinbase.com/en/wallet/getting-started/smart-wallet" target="_blank" rel="noreferrer">帮助中心</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Argent</div><span class="project-badge">恢复</span></div>
+              <p>seedless、social recovery 和安全策略是早期智能钱包 UX 的代表路径。</p>
+              <div class="talk-line">核心看点：丢私钥不应该自动等于丢资产。</div>
+              <a class="project-link" href="https://www.argent.xyz/" target="_blank" rel="noreferrer">官网</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Rabby</div><span class="project-badge">交易模拟</span></div>
+              <p>在签名前展示交易模拟、风险扫描和授权管理，让用户知道交互后资产会怎么变化。</p>
+              <div class="talk-line">核心看点：用户需要的不是“确认按钮”，而是“后果解释器”。</div>
+              <a class="project-link" href="https://www.rabby.io/en/security.html" target="_blank" rel="noreferrer">安全介绍</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Safe</div><span class="project-badge">智能账户</span></div>
+              <p>多签和智能账户经典项目，广泛用于 DAO、团队金库、协议治理和机构资产管理。</p>
+              <div class="talk-line">核心看点：从单私钥到组织级权限系统。</div>
+              <a class="project-link" href="https://www.safe.global/wallet" target="_blank" rel="noreferrer">官网</a>
+            </article>
+          </div>
+        </div>
+      </article>
+
+      <article class="direction" id="risk">
+        <div class="direction-head">
+          <div class="direction-index">5</div>
+          <div>
+            <h3>交易所和 DeFi 智能风控系统</h3>
+            <p class="direction-summary">这一类项目回答的是“系统怎么提前发现风险”：交易所 KYT、地址筛查、反洗钱、协议参数模拟、攻击预警、清算风险和自动响应。</p>
+          </div>
+        </div>
+        <div class="lesson-grid">
+          <aside class="lesson-panel">
+            <h4>关键理解</h4>
+            <ul class="lesson-list">
+              <li>交易所看的是合规与资金来源，DeFi 协议看的是攻击、清算、流动性和参数风险。</li>
+              <li>AI 的价值不是替代规则，而是把海量链上行为转成异常模式、解释和优先级。</li>
+              <li>风险系统必须能落地到动作：告警、冻结、限额、参数调整、暂停合约或阻断交易。</li>
+            </ul>
+          </aside>
+          <div class="project-grid">
+            <article class="project-card project-card--featured">
+              <div class="project-top">
+                <div>
+                  <p class="featured-label">主案例 / 交易所与 DeFi 风控</p>
+                  <div class="project-name">Chainalysis</div>
+                </div>
+                <span class="project-badge">合规</span>
+              </div>
+              <p>Chainalysis 代表的是机构级链上合规和风险分析。它不面向短线交易信号，而是帮助交易所、金融机构和监管场景判断资金来源、识别可疑行为、满足合规要求，并把链上交易转成可调查、可审计的风险事件。</p>
+              <div class="principle-block">
+                <h4>实现原理</h4>
+                <div class="principle-flow" aria-label="Chainalysis 实现流程">
+                  <span>采集多链地址和交易数据</span><i>→</i>
+                  <span>实体归因和风险分类</span><i>→</i>
+                  <span>KYT 实时监控充值提现</span><i>→</i>
+                  <span>异常交易触发告警</span><i>→</i>
+                  <span>合规团队调查和处置</span>
+                </div>
+              </div>
+              <div class="talk-line">核心看点：交易所风控的核心是资金来源、制裁、诈骗和可疑行为。</div>
+              <a class="project-link" href="https://www.chainalysis.com/solution/crypto-compliance/" target="_blank" rel="noreferrer">解决方案</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Elliptic</div><span class="project-badge">KYT</span></div>
+              <p>提供钱包和交易风险识别，并把链上风险分析转成更容易被合规团队理解的洞察。</p>
+              <div class="talk-line">核心看点：AI copilot 如何辅助合规分析员判断风险。</div>
+              <a class="project-link" href="https://www.elliptic.co/" target="_blank" rel="noreferrer">官网</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Forta</div><span class="project-badge">监控网络</span></div>
+              <p>去中心化实时监控网络，围绕攻击检测、异常行为和交易前防护构建安全体系。</p>
+              <div class="talk-line">核心看点：DeFi 安全从事后报告走向事前监控和阻断。</div>
+              <a class="project-link" href="https://www.forta.org/" target="_blank" rel="noreferrer">官网</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Hypernative</div><span class="project-badge">实时预警</span></div>
+              <p>面向协议、金库和机构的实时威胁检测、攻击预警和自动化响应平台。</p>
+              <div class="talk-line">核心看点：链上风控的时间窗口常常只有几分钟甚至几秒。</div>
+              <a class="project-link" href="https://www.hypernative.io/" target="_blank" rel="noreferrer">官网</a>
+            </article>
+            <article class="project-card">
+              <div class="project-top"><div class="project-name">Chaos Labs / Gauntlet</div><span class="project-badge">参数风险</span></div>
+              <p>围绕借贷协议、衍生品、清算和资金效率做模拟、监控和参数建议。</p>
+              <div class="talk-line">核心看点：DeFi 风控不是一次审计，而是持续建模。</div>
+              <a class="project-link" href="https://chaoslabs.xyz/" target="_blank" rel="noreferrer">Chaos Labs</a>
+            </article>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section reveal" id="matrix">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">03 / Project Matrix</div>
+          <h2>项目矩阵：按能力场景筛选</h2>
+        </div>
+        <p class="section-lede">用矩阵快速定位项目位置：资源层、Agent 钱包、链上分析、钱包安全和系统风控分别解决不同环节的问题。</p>
+      </div>
+
+      <div class="matrix-tools" aria-label="项目筛选">
+        <button class="filter-btn is-active" type="button" data-filter="all">全部</button>
+        <button class="filter-btn" type="button" data-filter="infra">基础设施</button>
+        <button class="filter-btn" type="button" data-filter="agent">Agent 钱包</button>
+        <button class="filter-btn" type="button" data-filter="analytics">链上分析</button>
+        <button class="filter-btn" type="button" data-filter="wallet">钱包安全</button>
+        <button class="filter-btn" type="button" data-filter="risk">风控</button>
+      </div>
+
+      <div class="matrix-grid" id="projectMatrix">
+        <article class="matrix-card" data-category="infra"><small>基础设施</small><b>Bittensor</b><span>用 subnet 和激励机制组织 AI 服务供给。</span></article>
+        <article class="matrix-card" data-category="infra"><small>基础设施</small><b>Render</b><span>去中心化 GPU 网络，连接算力供需。</span></article>
+        <article class="matrix-card" data-category="infra"><small>基础设施</small><b>Akash</b><span>去中心化云计算市场，支持 GPU workload。</span></article>
+        <article class="matrix-card" data-category="infra"><small>基础设施</small><b>Filecoin / Arweave</b><span>AI 数据、模型权重和长期记录的存储层。</span></article>
+        <article class="matrix-card" data-category="agent"><small>Agent 钱包</small><b>Coinbase AgentKit</b><span>把 AI agent 接入钱包、转账和合约执行。</span></article>
+        <article class="matrix-card" data-category="agent"><small>Agent 钱包</small><b>MoonPay Agents</b><span>面向 agent 的入金、支付、钱包和交易执行。</span></article>
+        <article class="matrix-card" data-category="agent"><small>Agent 钱包</small><b>Virtuals</b><span>tokenized AI agents 和消费端 agent 经济叙事。</span></article>
+        <article class="matrix-card" data-category="agent"><small>Agent 钱包</small><b>elizaOS</b><span>开源 Web3 agent 框架和插件生态。</span></article>
+        <article class="matrix-card" data-category="analytics"><small>链上分析</small><b>Arkham</b><span>地址标签、实体画像和资金流追踪。</span></article>
+        <article class="matrix-card" data-category="analytics"><small>链上分析</small><b>Nansen</b><span>Smart Money、钱包标签和市场行为分析。</span></article>
+        <article class="matrix-card" data-category="analytics"><small>链上分析</small><b>Dune</b><span>自然语言、MCP 和 dashboard 分析工作流。</span></article>
+        <article class="matrix-card" data-category="analytics"><small>链上分析</small><b>Bubblemaps</b><span>钱包集群、代币分布和 insider 关系图。</span></article>
+        <article class="matrix-card" data-category="wallet"><small>钱包安全</small><b>Safe</b><span>多签、智能账户和组织资产管理。</span></article>
+        <article class="matrix-card" data-category="wallet"><small>钱包安全</small><b>Rabby</b><span>交易模拟、风险扫描和授权管理。</span></article>
+        <article class="matrix-card" data-category="wallet"><small>钱包安全</small><b>Blockaid</b><span>恶意 dApp 检测、交易模拟和风险拦截。</span></article>
+        <article class="matrix-card" data-category="risk"><small>风控</small><b>Chainalysis</b><span>KYT、地址筛查和交易所合规风控。</span></article>
+        <article class="matrix-card" data-category="risk"><small>风控</small><b>Forta</b><span>链上实时监控、攻击检测和交易前防护。</span></article>
+        <article class="matrix-card" data-category="risk"><small>风控</small><b>Chaos Labs</b><span>DeFi 参数模拟、清算风险和市场健康度。</span></article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="risks">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">04 / Risk Boundary</div>
+          <h2>先识别边界，再判断价值</h2>
+        </div>
+        <p class="section-lede">AI + Web3 很容易被包装成万能叙事。更稳妥的判断方式是区分真实基础设施、早期实验和短期投机。</p>
+      </div>
+
+      <div class="risk-grid">
+        <article class="risk-item">
+          <h3>模型不能直接等于执行权</h3>
+          <p>agent 可以建议交易，但真实资金动作必须有授权、限额、确认、撤销和日志。否则 prompt injection 就可能变成资金损失。</p>
+        </article>
+        <article class="risk-item">
+          <h3>链上标签不是法律事实</h3>
+          <p>地址聚类、实体归因和风险评分都有误差。机构使用时需要证据链、人工复核和合规流程。</p>
+        </article>
+        <article class="risk-item">
+          <h3>去中心化资源要验证质量</h3>
+          <p>算力、数据和模型服务不是发 token 就能成立。核心问题是可用性、反作弊、定价、隐私和 SLA。</p>
+        </article>
+        <article class="risk-item">
+          <h3>钱包体验不能牺牲安全</h3>
+          <p>免助记词、免 gas、自动授权能降低门槛，也会带来托管边界、权限滥用和恢复机制风险。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="script">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">05 / Summary</div>
+          <h2>三条判断</h2>
+        </div>
+        <p class="section-lede">看懂 AI + Web3，不需要先记住所有项目名。抓住这三条判断，就能理解大多数项目的位置和价值边界。</p>
+      </div>
+
+      <div class="scripts">
+        <article class="script-card">
+          <h3>1. Agent 需要经济账户</h3>
+          <p class="quote">“AI agent 一旦开始做事，就会遇到账户、支付、授权和追责问题。”</p>
+          <p>算力和存储解决生产资源，钱包解决经济账户，分析工具解决认知，安全助手解决用户风险，风控系统解决机构和协议风险。</p>
+        </article>
+        <article class="script-card">
+          <h3>2. 项目对应具体环节</h3>
+          <p class="quote">“每个项目都不是孤立的，它在回答 agent 经济栈里的一个具体问题。”</p>
+          <p>比如 Bittensor 回答 AI 服务如何被激励，Coinbase AgentKit 回答 agent 如何上链执行，Arkham 回答链上数据如何被解释，Blockaid 回答签名前如何阻断风险。</p>
+        </article>
+        <article class="script-card">
+          <h3>3. Token 不是价值本身</h3>
+          <p class="quote">“AI + Web3 的价值不是给 AI 套 token，而是让软件主体进入可授权、可结算、可审计的经济系统。”</p>
+          <p>需要把投机叙事和基础设施价值分开。真正值得跟踪的是有真实用户、有工程接口、有安全约束、有合规意识的项目。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="sources">
+      <div class="section-header">
+        <div>
+          <div class="section-kicker">06 / Sources</div>
+          <h2>参考来源</h2>
+        </div>
+        <p class="section-lede">内容基于截至 2026-05-21 的公开资料整理，链接优先指向官方文档或项目官网。</p>
+      </div>
+      <div class="source-panel">
+        <h3>官方资料入口</h3>
+        <ul class="source-list">
+          <li><a href="https://docs.learnbittensor.org/subnets/understanding-subnets/" target="_blank" rel="noreferrer">Bittensor Subnets</a></li>
+          <li><a href="https://rendernetwork.com/" target="_blank" rel="noreferrer">Render Network</a></li>
+          <li><a href="https://akash.network/docs/getting-started/" target="_blank" rel="noreferrer">Akash Docs</a></li>
+          <li><a href="https://www.filecoin.io/store-data" target="_blank" rel="noreferrer">Filecoin Storage</a></li>
+          <li><a href="https://docs.cdp.coinbase.com/agent-kit" target="_blank" rel="noreferrer">Coinbase AgentKit</a></li>
+          <li><a href="https://www.moonpay.com/newsroom/moonpay-agents?from=%2Fnewsroom" target="_blank" rel="noreferrer">MoonPay Agents</a></li>
+          <li><a href="https://whitepaper.virtuals.io/" target="_blank" rel="noreferrer">Virtuals Whitepaper</a></li>
+          <li><a href="https://codex.arkm.com/the-intelligence-platform" target="_blank" rel="noreferrer">Arkham Platform</a></li>
+          <li><a href="https://docs.dune.com/api-reference/agents/mcp/" target="_blank" rel="noreferrer">Dune MCP</a></li>
+          <li><a href="https://www.safe.global/wallet" target="_blank" rel="noreferrer">Safe Wallet</a></li>
+          <li><a href="https://www.rabby.io/en/security.html" target="_blank" rel="noreferrer">Rabby Security</a></li>
+          <li><a href="https://www.blockaid.io/" target="_blank" rel="noreferrer">Blockaid</a></li>
+          <li><a href="https://www.chainalysis.com/solution/crypto-compliance/" target="_blank" rel="noreferrer">Chainalysis Compliance</a></li>
+          <li><a href="https://www.forta.org/" target="_blank" rel="noreferrer">Forta</a></li>
+          <li><a href="https://chaoslabs.xyz/" target="_blank" rel="noreferrer">Chaos Labs</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <p class="footer-note">阅读路径：先看核心框架，再进入五个方向，最后用项目矩阵和风险边界做整体判断。</p>
+  </main>
+
+  <script>
+    const progressBar = document.querySelector("#progressBar");
+    const navLinks = [...document.querySelectorAll(".nav-link")];
+    const sections = navLinks
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    function updateProgress() {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+      progressBar.style.width = `${Math.min(100, Math.max(0, progress * 100))}%`;
+
+      let activeId = sections[0]?.id;
+      for (const section of sections) {
+        const box = section.getBoundingClientRect();
+        if (box.top <= 120) activeId = section.id;
+      }
+      navLinks.forEach((link) => {
+        link.classList.toggle("is-active", link.getAttribute("href") === `#${activeId}`);
+      });
+    }
+
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+    updateProgress();
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach((item) => revealObserver.observe(item));
+
+    const filterButtons = [...document.querySelectorAll(".filter-btn")];
+    const matrixCards = [...document.querySelectorAll(".matrix-card")];
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.dataset.filter;
+        filterButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+        matrixCards.forEach((card) => {
+          card.hidden = filter !== "all" && card.dataset.category !== filter;
+        });
+      });
+    });
+
+    const canvas = document.querySelector("#ledgerCanvas");
+    const context = canvas.getContext("2d");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let width = 0;
+    let height = 0;
+    let nodes = [];
+    let animationFrame = 0;
+
+    function resizeCanvas() {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      width = Math.max(1, rect.width);
+      height = Math.max(1, rect.height);
+      canvas.width = Math.floor(width * ratio);
+      canvas.height = Math.floor(height * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+      const count = Math.max(26, Math.min(58, Math.floor(width / 24)));
+      nodes = Array.from({ length: count }, (_, index) => ({
+        x: (Math.sin(index * 12.9898) * 43758.5453 % 1 + 1) % 1 * width,
+        y: (Math.sin(index * 78.233) * 24634.6345 % 1 + 1) % 1 * height,
+        vx: ((index % 5) - 2) * 0.08,
+        vy: (((index + 2) % 7) - 3) * 0.055,
+        r: 1.6 + (index % 4) * 0.7
+      }));
+    }
+
+    function drawLedger() {
+      context.clearRect(0, 0, width, height);
+      context.lineWidth = 1;
+
+      for (let i = 0; i < nodes.length; i += 1) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodes.length; j += 1) {
+          const b = nodes[j];
+          const distance = Math.hypot(a.x - b.x, a.y - b.y);
+          if (distance < 150) {
+            const alpha = (1 - distance / 150) * 0.22;
+            context.strokeStyle = `oklch(44% 0.12 255 / ${alpha})`;
+            context.beginPath();
+            context.moveTo(a.x, a.y);
+            context.lineTo(b.x, b.y);
+            context.stroke();
+          }
+        }
+      }
+
+      nodes.forEach((node, index) => {
+        const hue = index % 3 === 0 ? "42" : index % 3 === 1 ? "156" : "255";
+        context.fillStyle = `oklch(54% 0.13 ${hue} / 0.82)`;
+        context.beginPath();
+        context.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+        context.fill();
+
+        if (!prefersReducedMotion) {
+          node.x += node.vx;
+          node.y += node.vy;
+          if (node.x < -20) node.x = width + 20;
+          if (node.x > width + 20) node.x = -20;
+          if (node.y < -20) node.y = height + 20;
+          if (node.y > height + 20) node.y = -20;
+        }
+      });
+
+      if (!prefersReducedMotion) {
+        animationFrame = requestAnimationFrame(drawLedger);
+      }
+    }
+
+    resizeCanvas();
+    drawLedger();
+    window.addEventListener("resize", () => {
+      cancelAnimationFrame(animationFrame);
+      resizeCanvas();
+      drawLedger();
+    });
+  </script>
+</body>
+</html>
