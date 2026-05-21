@@ -4,12 +4,12 @@
 
 | Dimension | Level |
 |-----------|-------|
-| AI Foundation | Intermediate — familiar with ChatGPT/Claude, basic Prompt & concepts |
-| Web3 Foundation | Intermediate — used wallets, understand basic on-chain operations |
-| Programming | Basic scripting — Python/JS |
-| Target Direction | Product Research |
-| Daily Study Time | 1–2 hours |
-| Output Language | Bilingual (Chinese & English) |
+| AI Foundation | 有基础 — 熟悉 LLM、Prompt、Context、RAG、Agent 等概念 |
+| Web3 Foundation | 新手 — 需要补链上系统、钱包、合约等基础直觉 |
+| Programming | 能独立开发 — Python / JS / Shell |
+| Target Direction | 产品研究 |
+| Daily Study Time | 1–2 小时 |
+| Output Language | 中文为主 |
 
 ## Learning Goals
 
