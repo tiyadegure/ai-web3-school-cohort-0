@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI × Web3 最小交叉流程图</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0d1117; color: #e6edf3; font-family: -apple-system, 'Segoe UI', sans-serif; padding: 24px; }
+h1 { text-align: center; font-size: 1.5rem; margin-bottom: 8px; color: #58a6ff; }
+.subtitle { text-align: center; color: #8b949e; font-size: 0.9rem; margin-bottom: 24px; }
+.mermaid { display: flex; justify-content: center; }
+.mermaid svg { max-width: 100%; }
+.legend { max-width: 800px; margin: 32px auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.legend-item { background: #161b22; border-radius: 8px; padding: 12px 16px; border-left: 3px solid; }
+.legend-item.ai { border-color: #58a6ff; }
+.legend-item.human { border-color: #f0883e; }
+.legend-item.chain { border-color: #3fb950; }
+.legend-item h3 { font-size: 0.85rem; margin-bottom: 4px; }
+.legend-item.ai h3 { color: #58a6ff; }
+.legend-item.human h3 { color: #f0883e; }
+.legend-item.chain h3 { color: #3fb950; }
+.legend-item p { font-size: 0.8rem; color: #8b949e; }
+.risks { max-width: 800px; margin: 24px auto 0; background: #161b22; border-radius: 8px; padding: 16px 20px; border-left: 3px solid #f85149; }
+.risks h3 { color: #f85149; font-size: 0.9rem; margin-bottom: 8px; }
+.risks ul { list-style: none; }
+.risks li { font-size: 0.85rem; color: #8b949e; padding: 3px 0; }
+.risks li::before { content: "⚠ "; }
+</style>
+</head>
+<body>
+<h1>AI × Web3 最小交叉流程图</h1>
+<p class="subtitle">场景：Agent 辅助 ERC-20 Swap（受限模式）</p>
+
+<div class="mermaid">
+flowchart TD
+    A["👤 用户发起任务\n用 0.01 ETH 换 USDC"] --> B["🤖 ① AI 解析意图\n+ 加载链上上下文"]
+    B --> C["🤖 ② AI 生成交易计划\n路由 / 滑点 / Gas"]
+    C --> D["🤖 ③ 交易模拟\n+ 风险检查"]
+    D --> E{"风险可接受？"}
+    E -- 否 --> F["❌ 拒绝执行\n记录原因"]
+    E -- 是 --> G["🤖 ④ 生成交易摘要\n资产变化 / 权限变化"]
+    G --> H["⚠️ ⑤ 人工确认\n用户审核并决定"]
+    H -- 拒绝 --> I["取消交易"]
+    H -- 确认 --> J["🔐 ⑥ 钱包签名\n用户私钥签名"]
+    J --> K["⛓️ ⑦ 等待链上确认\n监听 tx hash"]
+    K --> L["🤖 ⑧ 结果验证\n余额变化 + Trace"]
+    L --> M["✅ 完成\n记录到 Trace"]
+
+    classDef aiAuto fill:#1f3a5f,stroke:#58a6ff,color:#e6edf3
+    classDef humanNode fill:#3d2e1a,stroke:#f0883e,color:#e6edf3
+    classDef chainNode fill:#1a3d2a,stroke:#3fb950,color:#e6edf3
+    classDef riskNode fill:#3d1a1a,stroke:#f85149,color:#e6edf3
+    classDef decision fill:#2d2d2d,stroke:#8b949e,color:#e6edf3
+
+    class B,C,D,G,L aiAuto
+    class A,H humanNode
+    class J,K chainNode
+    class F,I riskNode
+    class E decision
+</div>
+
+<div class="legend">
+    <div class="legend-item ai">
+        <h3>🤖 AI/Agent 自动</h3>
+        <p>① 意图解析 ② 交易规划 ③ 模拟检查 ④ 摘要生成 ⑧ 结果验证</p>
+    </div>
+    <div class="legend-item human">
+        <h3>⚠️ Human-in-the-loop</h3>
+        <p>⑤ 人工确认 — 看懂资产变化和风险后决定</p>
+    </div>
+    <div class="legend-item chain">
+        <h3>⛓️ 链上/钱包操作</h3>
+        <p>⑥ 钱包签名 ⑦ 链上确认 — Agent 不接触私钥</p>
+    </div>
+</div>
+
+<div class="risks">
+    <h3>主要风险点</h3>
+    <ul>
+        <li>滑点被 MEV 夹击（三明治攻击）</li>
+        <li>ERC-20 approve 授权恶意合约（无限授权风险）</li>
+        <li>模拟通过但实际 revert（链上状态已变化）</li>
+        <li>RPC 返回错误数据（不可信数据源）</li>
+        <li>Gas 价格突然飙升（交易 pending 或超付）</li>
+    </ul>
+</div>
+
+<script>
+mermaid.initialize({
+    theme: 'dark',
+    themeVariables: {
+        primaryColor: '#1f3a5f',
+        primaryTextColor: '#e6edf3',
+        lineColor: '#58a6ff',
+        secondaryColor: '#161b22',
+        tertiaryColor: '#0d1117'
+    },
+    flowchart: { curve: 'basis', padding: 20 }
+});
+</script>
+</body>
+</html>
