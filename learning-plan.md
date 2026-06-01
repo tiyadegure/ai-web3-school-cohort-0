@@ -7,17 +7,17 @@
 Goal: Fill gaps in AI and Web3 foundations using the Handbook.
 
 ### AI Foundation
-- [ ] [LLM](https://aiweb3.school/zh/handbook/ai/llm/) — What LLMs can and cannot do
-- [ ] [Prompt](https://aiweb3.school/zh/handbook/ai/prompt/) — Task goals, boundaries, output formats
-- [ ] [Context](https://aiweb3.school/zh/handbook/ai/context/) — What the model sees, trust & freshness
-- [ ] [RAG](https://aiweb3.school/zh/handbook/ai/rag/) — External knowledge & citation
-- [ ] [Agent](https://aiweb3.school/zh/handbook/ai/agent/) — Tool calling & multi-step execution
-- [ ] [Frameworks](https://aiweb3.school/zh/handbook/ai/frameworks/) — LangChain, LangGraph, Agents SDK
-- [ ] [Vibe Coding](https://aiweb3.school/zh/handbook/ai/vibe-coding/) — AI-assisted coding
-- [ ] [MCP](https://aiweb3.school/zh/handbook/ai/mcp/) — Model Context Protocol
-- [ ] [Evaluation](https://aiweb3.school/zh/handbook/ai/evaluation/) — Testing & improving outputs
-- [ ] [Fine-tuning](https://aiweb3.school/zh/handbook/ai/fine-tuning/) — Custom model training
-- [ ] [Inference](https://aiweb3.school/zh/handbook/ai/inference/) — Inference services
+- [x] [LLM](https://aiweb3.school/zh/handbook/ai/llm/) — What LLMs can and cannot do
+- [x] [Prompt](https://aiweb3.school/zh/handbook/ai/prompt/) — Task goals, boundaries, output formats
+- [x] [Context](https://aiweb3.school/zh/handbook/ai/context/) — What the model sees, trust & freshness
+- [x] [RAG](https://aiweb3.school/zh/handbook/ai/rag/) — External knowledge & citation
+- [x] [Agent](https://aiweb3.school/zh/handbook/ai/agent/) — Tool calling & multi-step execution
+- [x] [Frameworks](https://aiweb3.school/zh/handbook/ai/frameworks/) — LangChain, LangGraph, Agents SDK
+- [x] [Vibe Coding](https://aiweb3.school/zh/handbook/ai/vibe-coding/) — AI-assisted coding
+- [x] [MCP](https://aiweb3.school/zh/handbook/ai/mcp/) — Model Context Protocol
+- [x] [Evaluation](https://aiweb3.school/zh/handbook/ai/evaluation/) — Testing & improving outputs
+- [x] [Fine-tuning](https://aiweb3.school/zh/handbook/ai/fine-tuning/) — Custom model training
+- [x] [Inference](https://aiweb3.school/zh/handbook/ai/inference/) — Inference services
 
 ### Web3 Foundation
 - [ ] [Cryptography](https://aiweb3.school/zh/handbook/web3/cryptography/) — Hash, keys, signatures
